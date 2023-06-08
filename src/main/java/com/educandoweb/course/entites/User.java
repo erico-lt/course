@@ -12,11 +12,11 @@ import jakarta.persistence.Table;
 @Table(name = "tb_user")
 public class User implements Serializable{
 
-    private static final long SerialVersionUID = 1L;    
+    private static final Long SerialVersionUID = 1L;    
 
     @Id    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String email;
     private String phone;
@@ -25,7 +25,7 @@ public class User implements Serializable{
     public User() {        
     }
 
-    public User(long id, String name, String email, String phone, String password) {
+    public User(Long id, String name, String email, String phone, String password) {
         this.setId(id);
         this.setName(name);
         this.setEmail(email);
@@ -33,11 +33,11 @@ public class User implements Serializable{
         this.setPassword(password);
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -73,7 +73,7 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    protected static long getSerialversionuid() {
+    protected static Long getSerialversionuid() {
         return SerialVersionUID;
     }
 
