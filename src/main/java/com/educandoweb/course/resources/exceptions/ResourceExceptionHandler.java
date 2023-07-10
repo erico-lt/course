@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.educandoweb.course.services.exceptions.DatabaseException;
+import com.educandoweb.course.services.exceptions.EntityFoundException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,21 +25,30 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler{
     public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) {
 
         String error = "Resource not found";
-        HttpStatus status = HttpStatus.NOT_FOUND; // Usado para mudar o tipo de codigo vai ser apresentado caso estoure uma exceção
+        HttpStatus status = HttpStatus.NOT_FOUND; 
         
-        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI()); //Este é o corpo que vai aparecer caso não encontre um usuario
-
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
-
 
     @ExceptionHandler(DatabaseException.class) // Anotação para interceptar exceções do tipo ResourceNotFound
     public ResponseEntity<StandardError> dataBaseViolation(DatabaseException e, HttpServletRequest request) {
 
         String error = "Data Base Error";
-        HttpStatus status = HttpStatus.BAD_REQUEST; // Usado para mudar o tipo de codigo vai ser apresentado caso estoure uma exceção
+        HttpStatus status = HttpStatus.BAD_REQUEST; 
         
-        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI()); //Este é o corpo que vai aparecer caso não encontre um usuario
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+
+        return ResponseEntity.status(status).body(err);
+    }     
+
+    @ExceptionHandler(EntityFoundException.class) 
+    public ResponseEntity<StandardError> entityFoud(EntityFoundException e, HttpServletRequest request) {
+
+        String error = "Redource not found for deletion";
+        HttpStatus status = HttpStatus.BAD_REQUEST; 
+        
+        StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 
         return ResponseEntity.status(status).body(err);
     }     

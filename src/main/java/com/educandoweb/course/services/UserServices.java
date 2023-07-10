@@ -10,11 +10,14 @@ import org.springframework.stereotype.Service;
 import com.educandoweb.course.entites.User;
 import com.educandoweb.course.repositorys.UserRepository;
 import com.educandoweb.course.services.exceptions.DatabaseException;
+import com.educandoweb.course.services.exceptions.EntityFoundException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserServices {
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -34,20 +37,24 @@ public class UserServices {
 
     public void deleteById(Long id) {
         try {
-            if(userRepository.existsById(id)) {
+            if (userRepository.existsById(id)) {
                 userRepository.deleteById(id);
             } else {
                 throw new ResourceNotFoundException(id);
-            }                     
+            }
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
-    }       
+    }
 
     public User update(Long id, User user) {
-        User entity = userRepository.getReferenceById(id);
-        updateData(user, entity);
-        return userRepository.save(entity);
+        try {
+            User entity = userRepository.getReferenceById(id);
+            updateData(user, entity);
+            return userRepository.save(entity);
+        } catch (EntityNotFoundException e) {           
+            throw new EntityFoundException(e.getMessage());
+        }        
     }
 
     private void updateData(User user, User entity) {
