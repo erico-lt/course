@@ -12,6 +12,8 @@ import com.educandoweb.course.repositorys.CategoryRepository;
 import com.educandoweb.course.services.exceptions.DatabaseException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class CategoryServices {
     
@@ -24,7 +26,7 @@ public class CategoryServices {
 
     public Category findById(Long id) {
         Optional<Category> obj = categoryRepository.findById(id);
-        return obj.get();
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public Category insert(Category category) {
@@ -44,5 +46,21 @@ public class CategoryServices {
             throw new DatabaseException(e.getMessage());            
         } 
     }
-}
 
+    public Category update(Long id, Category category) {
+
+        try {
+            Category entity = categoryRepository.getReferenceById(id);
+            entity = updateData(category, entity);
+            return categoryRepository.save(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(e.getMessage());
+        }       
+    }
+
+    private Category updateData(Category category, Category entity) {
+        
+        entity.setName(category.getName());
+        return entity;
+    }
+}
