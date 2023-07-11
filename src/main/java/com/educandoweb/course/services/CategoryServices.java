@@ -23,4 +23,9 @@ public class CategoryServices {
         Optional<Category> obj = categoryRepository.findById(id);
         return obj.get();
     }
+
+    public Category insert(Category category) {
+
+        return categoryRepository.save(category);
+    }
 }
