@@ -27,16 +27,16 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private ProductRepository productRepository;
-
+    
     @Autowired
     private CategoryRepository categoryRepository;
-
+    
     @Autowired
     private UserRepository userRepository;
-
+    
     @Autowired
     private OrderRepository orderRepository;
-
+    
     @Autowired
     private OrderItemRepository orderItemRepository;
 

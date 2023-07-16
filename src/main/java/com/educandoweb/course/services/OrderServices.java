@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entites.Order;
+import com.educandoweb.course.entites.OrderItem;
 import com.educandoweb.course.repositorys.OrderRepository;
 import com.educandoweb.course.services.exceptions.DatabaseException;
 import com.educandoweb.course.services.exceptions.ResourceNotFoundException;
@@ -44,4 +45,19 @@ public class OrderServices {
             throw new DatabaseException(e.getMessage());
         }
     }
+
+    public Order update(Long id, Integer quantity) {
+
+        Order entity = orderRepository.getReferenceById(id);
+        updatedata(entity, quantity, id);
+
+        return orderRepository.save(entity);
+    }
+
+    public void updatedata(Order entity, Integer quantity, Long id) {
+        
+        for(OrderItem x: entity.getItems()) {
+            x.setQuantity(quantity);
+        } 
+    } 
 }
